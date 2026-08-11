@@ -115,6 +115,9 @@ let g:airline_theme = 'gruvbox'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#coc#enabled = 1
 
+" Status line: N/M — текущая строка и колонка (символ в строке).
+let g:airline_section_z = airline#section#create(['%l/%c'])
+
 " vim-devicons: Nerd Font glyphs in NERDTree, airline, fzf.
 let g:webdevicons_enable = 1
 let g:webdevicons_enable_nerdtree = 1
