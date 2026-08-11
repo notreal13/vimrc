@@ -197,7 +197,8 @@ function! s:OpenCheatSheet() abort
     endif
     " Новая вкладка, read-only (sview). Предыдущая вкладка с кодом остаётся.
     execute 'tab sview' fnameescape(l:path)
-    setlocal signcolumn=no
+    " Чистый вид: без номеров строк и signcolumn, перенос по словам.
+    setlocal signcolumn=no nonumber norelativenumber wrap linebreak
     " Внутри шпаргалки: Esc или тот же <leader>h закрывают вкладку -> возврат
     " к прежнему буферу и позиции курсора.
     nnoremap <silent> <buffer> <Esc>     :quit!<CR>
@@ -318,7 +319,8 @@ augroup END
 if executable('macism')
     augroup keyboard_layout
         autocmd!
-        autocmd VimEnter,InsertLeave * call system('macism com.apple.keylayout.ABC')
+        autocmd VimEnter    *   call system('macism com.apple.keylayout.ABC')
+        autocmd ModeChanged *:n call system('macism com.apple.keylayout.ABC')
     augroup END
 endif
 
