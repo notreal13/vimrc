@@ -185,6 +185,27 @@ nmap <leader>gs <Plug>(GitGutterStageHunk)
 nmap <leader>gu <Plug>(GitGutterUndoHunk)
 
 " -----------------------------------------------------------------------------
+" Cheat sheet — открыть на весь экран; Esc или <leader>h закрывают и возвращают
+" -----------------------------------------------------------------------------
+function! s:OpenCheatSheet() abort
+    let l:path = expand('~/vim-guide/CHEATSHEET.md')
+    if !filereadable(l:path)
+        echohl WarningMsg
+        echom 'cheatsheet not found: ' . l:path
+        echohl None
+        return
+    endif
+    " Новая вкладка, read-only (sview). Предыдущая вкладка с кодом остаётся.
+    execute 'tab sview' fnameescape(l:path)
+    setlocal signcolumn=no
+    " Внутри шпаргалки: Esc или тот же <leader>h закрывают вкладку -> возврат
+    " к прежнему буферу и позиции курсора.
+    nnoremap <silent> <buffer> <Esc>     :quit!<CR>
+    nnoremap <silent> <buffer> <leader>h :quit!<CR>
+endfunction
+nnoremap <silent> <leader>h :call <SID>OpenCheatSheet()<CR>
+
+" -----------------------------------------------------------------------------
 " CoC / LSP
 " -----------------------------------------------------------------------------
 
