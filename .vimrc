@@ -115,6 +115,34 @@ let g:airline_theme = 'gruvbox'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#coc#enabled = 1
 
+" Compact Java status: "JavaSE-25 OK" -> "25 ✓".
+function! CompactCocStatus() abort
+  let l:status = get(g:, 'coc_status', '')
+  let l:status = substitute(l:status, '\<JavaSE-\(\d\+\)\>', '\1', 'g')
+  return substitute(l:status, '\<OK\>', '✓', 'g')
+endfunction
+
+function! SetupCompactCocStatus() abort
+  call airline#parts#define('coc_status_compact', {
+        \ 'function': 'CompactCocStatus',
+        \ 'accent': 'bold'
+        \ })
+  let l:file_part = exists('+autochdir') && &autochdir ? 'path' : 'file'
+  let g:airline_section_c = airline#section#create([
+        \ '%<', l:file_part, g:airline_symbols.space, 'readonly',
+        \ 'coc_status_compact', 'lsp_progress'
+        \ ])
+endfunction
+
+augroup compact_coc_status
+  autocmd!
+  autocmd User AirlineAfterInit call SetupCompactCocStatus()
+augroup END
+
+if exists('*airline#parts#define')
+  call SetupCompactCocStatus()
+endif
+
 " Status line: N/M — текущая строка и колонка (символ в строке).
 let g:airline_section_z = airline#section#create(['%l/%c'])
 
