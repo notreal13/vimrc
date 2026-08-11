@@ -40,8 +40,10 @@ if has('clipboard')
     set clipboard=unnamed
 endif
 
-" Do not fail on a fresh machine where the colorscheme is not installed yet.
-silent! colorscheme molokai
+" True color — kitty supports 24-bit; required for modern colorschemes.
+if has('termguicolors')
+    set termguicolors
+endif
 
 if has('gui_running')
     set guifont=IBM\ Plex\ Mono:h13
@@ -78,6 +80,16 @@ if filereadable(s:vim_plug)
     Plug 'vim-test/vim-test'
     Plug 'airblade/vim-gitgutter'
 
+    " Colorscheme.
+    Plug 'morhetz/gruvbox'
+
+    " Status line.
+    Plug 'vim-airline/vim-airline'
+    Plug 'vim-airline/vim-airline-themes'
+
+    " Filetype icons (must be loaded after all other plugins).
+    Plug 'ryanoasis/vim-devicons'
+
     call plug#end()
 else
     echohl WarningMsg
@@ -96,6 +108,23 @@ let NERDTreeIgnore = ['\.git$', '\.jpg$', '\.mp4$', '\.ogg$', '\.iso$',
 
 let test#strategy = 'vimterminal'
 let test#vim#term_position = 'belowright 15'
+
+" Airline: status/tabline with git branch, coc diagnostics, gruvbox theme.
+let g:airline_powerline_fonts = 1
+let g:airline_theme = 'gruvbox'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#coc#enabled = 1
+
+" vim-devicons: Nerd Font glyphs in NERDTree, airline, fzf.
+let g:webdevicons_enable = 1
+let g:webdevicons_enable_nerdtree = 1
+let g:webdevicons_enable_airline_tabline = 1
+
+" Gruvbox colorscheme — applied after plug#end() so the plugin is on &rtp.
+let g:gruvbox_contrast_dark = 'medium'
+let g:gruvbox_invert_selection = 0
+set background=dark
+silent! colorscheme gruvbox
 
 " -----------------------------------------------------------------------------
 " General mappings
